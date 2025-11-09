@@ -1,0 +1,157 @@
+SELECT * FROM Employee WHERE department='IT';
+SELECT * FROM Employee WHERE salary > 45000;
+SELECT department, COUNT(*) AS Total_Employees FROM Employee GROUP BY department;
+SELECT AVG(salary) AS Avg_Salary FROM Employee;
+SELECT emp_name, salary FROM Employee ORDER BY salary ASC;
+SELECT * FROM Employee WHERE emp_name LIKE 'N%';
+SELECT * FROM Employee WHERE salary BETWEEN 40000 AND 60000;
+DELETE FROM Employee WHERE department='Admin';
+
+SELECT * FROM Product WHERE category='Furniture';
+SELECT AVG(price) FROM Product;
+SELECT product_name, price FROM Product ORDER BY price DESC;
+SELECT category, COUNT(*) FROM Product GROUP BY category;
+SELECT * FROM Product WHERE stock BETWEEN 10 AND 30;
+SELECT * FROM Product WHERE supplier IN ('HP','Dell');
+UPDATE Product SET stock=60 WHERE product_name='Mouse';
+DELETE FROM Product WHERE category='Furniture';
+
+SELECT * FROM Student WHERE grade='A';
+SELECT COUNT(*) FROM Student WHERE city='Pune';
+SELECT course, AVG(marks) FROM Student GROUP BY course;
+SELECT * FROM Student WHERE marks > 80;
+SELECT * FROM Student WHERE student_name LIKE '%a';
+UPDATE Student SET marks=78 WHERE student_name='Rahul';
+DELETE FROM Student WHERE city='Nashik';
+SELECT * FROM Student ORDER BY marks DESC;
+
+SELECT * FROM Library WHERE category='Education';
+SELECT AVG(price) FROM Library;
+SELECT COUNT(*) FROM Library WHERE issued='Y';
+SELECT * FROM Library WHERE price BETWEEN 600 AND 900;
+SELECT * FROM Library ORDER BY price ASC;
+SELECT * FROM Library WHERE title LIKE 'S%';
+UPDATE Library SET issued='Y' WHERE title='AI Basics';
+DELETE FROM Library WHERE price < 600;
+
+SELECT * FROM Hospital WHERE disease='Fever';
+SELECT city, COUNT(*) FROM Hospital GROUP BY city;
+SELECT SUM(bill_amount), AVG(bill_amount) FROM Hospital;
+SELECT * FROM Hospital WHERE bill_amount > 3000;
+SELECT * FROM Hospital WHERE patient_name LIKE '%a%';
+UPDATE Hospital SET bill_amount=2500 WHERE patient_name='Sita';
+DELETE FROM Hospital WHERE bill_amount < 3000;
+SELECT * FROM Hospital ORDER BY age DESC;
+
+SELECT * FROM Course WHERE fees > 6000;
+SELECT AVG(fees) FROM Course;
+SELECT instructor, COUNT(*) FROM Course GROUP BY instructor;
+SELECT * FROM Course WHERE duration BETWEEN 2 AND 4;
+SELECT * FROM Course WHERE instructor='Ravi';
+UPDATE Course SET fees=7500 WHERE course_name='Java';
+DELETE FROM Course WHERE duration=2;
+SELECT * FROM Course ORDER BY fees ASC;
+
+
+SELECT e.emp_name, d.dept_name FROM Employee e INNER JOIN Department d ON e.dept_id=d.dept_id;
+SELECT e.emp_name, d.dept_name FROM Employee e LEFT JOIN Department d ON e.dept_id=d.dept_id;
+SELECT d.dept_name, SUM(e.salary) FROM Employee e JOIN Department d ON e.dept_id=d.dept_id GROUP BY d.dept_name;
+SELECT e.emp_name FROM Employee e JOIN Department d ON e.dept_id=d.dept_id WHERE d.dept_name='HR';
+SELECT * FROM Employee WHERE salary > 50000;
+SELECT dept_id, COUNT(*) FROM Employee GROUP BY dept_id;
+UPDATE Employee SET salary=48000 WHERE emp_name='Karan';
+DELETE FROM Employee WHERE dept_id=(SELECT dept_id FROM Department WHERE dept_name='Finance');
+
+
+SELECT * FROM Customer WHERE city='Pune';
+SELECT city, COUNT(*) FROM Customer GROUP BY city;
+SELECT * FROM Customer WHERE credit_limit > 15000;
+SELECT * FROM Customer WHERE cust_name LIKE '%a%';
+SELECT AVG(credit_limit) FROM Customer;
+UPDATE Customer SET credit_limit=12000 WHERE cust_name='Divya';
+DELETE FROM Customer WHERE city='Nagpur';
+SELECT * FROM Customer ORDER BY credit_limit DESC;
+
+SELECT * FROM Supplier WHERE rating >= 4;
+SELECT * FROM Supplier WHERE city='Pune';
+SELECT city, AVG(rating) FROM Supplier GROUP BY city;
+SELECT * FROM Supplier WHERE email LIKE '%gmail.com';
+SELECT * FROM Supplier WHERE rating BETWEEN 3 AND 5;
+SELECT city, COUNT(*) FROM Supplier GROUP BY city;
+UPDATE Supplier SET rating=3 WHERE supp_name='Neel';
+DELETE FROM Supplier WHERE rating < 3;
+
+SELECT * FROM Inventory WHERE category='Electronics';
+SELECT * FROM Inventory WHERE quantity > 20;
+SELECT category, COUNT(*) FROM Inventory GROUP BY category;
+SELECT AVG(unit_price) FROM Inventory;
+SELECT * FROM Inventory WHERE unit_price BETWEEN 500 AND 2000;
+UPDATE Inventory SET quantity=30 WHERE item_name='Keyboard';
+DELETE FROM Inventory WHERE quantity < 15;
+SELECT * FROM Inventory ORDER BY unit_price ASC;
+
+FINE CALCULATION
+DECLARE
+  v_rollno Borrower.Rollin%TYPE;
+  v_book Borrower.NameofBook%TYPE;
+  v_date Borrower.DateofIssue%TYPE;
+  v_days NUMBER;
+  v_amt NUMBER := 0;
+BEGIN
+  v_rollno := &Roll_No;
+  v_book := '&Book_Name';
+
+  SELECT DateofIssue INTO v_date FROM Borrower 
+  WHERE Rollin = v_rollno AND NameofBook = v_book;
+
+  v_days := SYSDATE - v_date;
+
+  IF v_days > 30 THEN
+     v_amt := v_days * 50;
+  ELSIF v_days BETWEEN 15 AND 30 THEN
+     v_amt := v_days * 5;
+  ELSE
+     v_amt := 0;
+  END IF;
+
+  UPDATE Borrower SET Status='R' WHERE Rollin=v_rollno;
+
+  IF v_amt > 0 THEN
+     INSERT INTO Fine VALUES (v_rollno, SYSDATE, v_amt);
+  END IF;
+
+  DBMS_OUTPUT.PUT_LINE('Fine Amount: ' || v_amt);
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+     DBMS_OUTPUT.PUT_LINE('No record found!');
+END;
+/
+
+N_ROLL_CALL 
+
+DECLARE
+  CURSOR c_merge IS
+    SELECT * FROM N_Roll_Call;
+  v_record c_merge%ROWTYPE;
+BEGIN
+  OPEN c_merge;
+  LOOP
+    FETCH c_merge INTO v_record;
+    EXIT WHEN c_merge%NOTFOUND;
+
+    BEGIN
+      INSERT INTO O_Roll_Call (roll_no, name, subject)
+      VALUES (v_record.roll_no, v_record.name, v_record.subject);
+    EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN
+        NULL; -- skip duplicates
+    END;
+  END LOOP;
+  CLOSE c_merge;
+
+  DBMS_OUTPUT.PUT_LINE('Merge completed successfully.');
+END;
+/
+
+
