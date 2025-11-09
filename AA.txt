@@ -155,3 +155,190 @@ END;
 /
 
 
+MONGODB
+// 1. Insert all documents
+db.employee.insertMany([
+  { "_id": 1, "name": "Riya", "department": "IT", "salary": 50000, "city": "Pune" },
+  { "_id": 2, "name": "Aarav", "department": "HR", "salary": 45000, "city": "Mumbai" },
+  { "_id": 3, "name": "Neha", "department": "Finance", "salary": 60000, "city": "Nashik" },
+  { "_id": 4, "name": "Karan", "department": "IT", "salary": 55000, "city": "Pune" },
+  { "_id": 5, "name": "Tina", "department": "Admin", "salary": 40000, "city": "Nagpur" }
+]);
+
+// 2. Display all employee records
+db.employee.find();
+
+// 3. Find employees who belong to the IT department
+db.employee.find({ department: "IT" });
+
+// 4. Display employees whose salary is greater than 45000
+db.employee.find({ salary: { $gt: 45000 } });
+
+// 5. Retrieve employees living in Pune or Mumbai using $or
+db.employee.find({ $or: [{ city: "Pune" }, { city: "Mumbai" }] });
+
+// 6. Display employees whose salary is between 40000 and 60000 using $and
+db.employee.find({ $and: [{ salary: { $gte: 40000 } }, { salary: { $lte: 60000 } }] });
+
+// 7. Find employees whose department is not HR
+db.employee.find({ department: { $ne: "HR" } });
+
+// 8. Update salary of employee named “Tina” to 42000
+db.employee.updateOne({ name: "Tina" }, { $set: { salary: 42000 } });
+
+// 9. Delete an employee from the Admin department
+db.employee.deleteOne({ department: "Admin" });
+
+// 10. Find employees whose name starts with ‘N’ using $regex
+db.employee.find({ name: { $regex: /^N/ } });
+
+
+// 1. Insert all documents
+db.product.insertMany([
+  { "_id": 1, "product_name": "Laptop", "category": "Electronics", "price": 55000, "stock": 10, "supplier": "Dell" },
+  { "_id": 2, "product_name": "Mouse", "category": "Electronics", "price": 800, "stock": 50, "supplier": "Logitech" },
+  { "_id": 3, "product_name": "Chair", "category": "Furniture", "price": 1500, "stock": 20, "supplier": "Ikea" },
+  { "_id": 4, "product_name": "Table", "category": "Furniture", "price": 2500, "stock": 15, "supplier": "Godrej" },
+  { "_id": 5, "product_name": "Printer", "category": "Electronics", "price": 9000, "stock": 8, "supplier": "HP" }
+]);
+
+// 2. Display all products
+db.product.find();
+
+// 3. Find all products belonging to the “Furniture” category
+db.product.find({ category: "Furniture" });
+
+// 4. Retrieve products whose price > 1000 using $gt
+db.product.find({ price: { $gt: 1000 } });
+
+// 5. Find all products where category is not “Electronics”
+db.product.find({ category: { $ne: "Electronics" } });
+
+// 6. Display products having stock between 10 and 30 using $and
+db.product.find({ $and: [{ stock: { $gte: 10 } }, { stock: { $lte: 30 } }] });
+
+// 7. Retrieve products where supplier is either “HP” or “Dell” using $in
+db.product.find({ supplier: { $in: ["HP", "Dell"] } });
+
+// 8. Update stock of product “Mouse” to 60
+db.product.updateOne({ product_name: "Mouse" }, { $set: { stock: 60 } });
+
+// 9. Delete a product having category “Furniture”
+db.product.deleteOne({ category: "Furniture" });
+
+// 10. Find all products whose name ends with “r” using $regex
+db.product.find({ product_name: { $regex: /r$/ } });
+
+
+// 1. Insert all records
+db.student.insertMany([
+  { "_id": 1, "name": "Anita", "course": "DBMS", "marks": 85, "grade": "A", "city": "Pune" },
+  { "_id": 2, "name": "Rahul", "course": "Python", "marks": 72, "grade": "B", "city": "Mumbai" },
+  { "_id": 3, "name": "Neha", "course": "DBMS", "marks": 91, "grade": "A", "city": "Pune" },
+  { "_id": 4, "name": "Karan", "course": "Java", "marks": 65, "grade": "C", "city": "Nashik" },
+  { "_id": 5, "name": "Isha", "course": "Python", "marks": 88, "grade": "A", "city": "Nagpur" }
+]);
+
+// 2. Display all students
+db.student.find();
+
+// 3. Find students with grade = “A”
+db.student.find({ grade: "A" });
+
+// 4. Display students having marks greater than 80 using $gt
+db.student.find({ marks: { $gt: 80 } });
+
+// 5. Find students from city “Pune” or “Mumbai” using $or
+db.student.find({ $or: [{ city: "Pune" }, { city: "Mumbai" }] });
+
+// 6. Retrieve students whose marks are between 70 and 90 using $and
+db.student.find({ $and: [{ marks: { $gte: 70 } }, { marks: { $lte: 90 } }] });
+
+// 7. Find students not belonging to course “DBMS”
+db.student.find({ course: { $ne: "DBMS" } });
+
+// 8. Update marks of student “Rahul” to 78
+db.student.updateOne({ name: "Rahul" }, { $set: { marks: 78 } });
+
+// 9. Delete a student with grade “C”
+db.student.deleteOne({ grade: "C" });
+
+// 10. Find students whose names contain “a” using $regex
+db.student.find({ name: { $regex: /a/i } });
+
+
+
+// 1. Insert all documents
+db.library.insertMany([
+  { "_id": 1, "title": "Database Systems", "author": "Navathe", "category": "Education", "price": 600, "issued": true },
+  { "_id": 2, "title": "Python Programming", "author": "Mark Lutz", "category": "Education", "price": 750, "issued": false },
+  { "_id": 3, "title": "Digital Circuits", "author": "Morris Mano", "category": "Engineering", "price": 500, "issued": true },
+  { "_id": 4, "title": "AI Basics", "author": "Russell", "category": "Technology", "price": 900, "issued": false },
+  { "_id": 5, "title": "SQL Cookbook", "author": "Alex", "category": "Education", "price": 800, "issued": true }
+]);
+
+// 2. Display all books
+db.library.find();
+
+// 3. Find books where category = “Education”
+db.library.find({ category: "Education" });
+
+// 4. Find books with price > 600 using $gt
+db.library.find({ price: { $gt: 600 } });
+
+// 5. Display books where issued = true
+db.library.find({ issued: true });
+
+// 6. Retrieve books having price between 600 and 900 using $and
+db.library.find({ $and: [{ price: { $gte: 600 } }, { price: { $lte: 900 } }] });
+
+// 7. Find books whose category is not “Technology”
+db.library.find({ category: { $ne: "Technology" } });
+
+// 8. Update issued status of “AI Basics” to true
+db.library.updateOne({ title: "AI Basics" }, { $set: { issued: true } });
+
+// 9. Delete a book with price less than 600
+db.library.deleteOne({ price: { $lt: 600 } });
+
+// 10. Find all books whose title starts with “S” using $regex
+db.library.find({ title: { $regex: /^S/ } });
+
+
+// 1. Insert all documents
+db.hospital.insertMany([
+  { "_id": 1, "name": "Ramesh", "disease": "Fever", "age": 25, "city": "Pune", "bill": 3000 },
+  { "_id": 2, "name": "Sita", "disease": "Cold", "age": 30, "city": "Mumbai", "bill": 2000 },
+  { "_id": 3, "name": "Anita", "disease": "Fracture", "age": 40, "city": "Pune", "bill": 8000 },
+  { "_id": 4, "name": "Vikas", "disease": "Migraine", "age": 35, "city": "Nashik", "bill": 4000 },
+  { "_id": 5, "name": "Deepa", "disease": "Fever", "age": 28, "city": "Nagpur", "bill": 3500 }
+]);
+
+// 2. Display all patient records
+db.hospital.find();
+
+// 3. Find patients having disease = “Fever”
+db.hospital.find({ disease: "Fever" });
+
+// 4. Retrieve patients whose bill > 3000 using $gt
+db.hospital.find({ bill: { $gt: 3000 } });
+
+// 5. Find patients from city “Pune” or “Mumbai” using $or
+db.hospital.find({ $or: [{ city: "Pune" }, { city: "Mumbai" }] });
+
+// 6. Display patients whose age is between 25 and 35 using $and
+db.hospital.find({ $and: [{ age: { $gte: 25 } }, { age: { $lte: 35 } }] });
+
+// 7. Find patients not suffering from “Cold” using $ne
+db.hospital.find({ disease: { $ne: "Cold" } });
+
+// 8. Update bill of patient “Sita” to 2500
+db.hospital.updateOne({ name: "Sita" }, { $set: { bill: 2500 } });
+
+// 9. Delete a patient whose bill < 3000
+db.hospital.deleteOne({ bill: { $lt: 3000 } });
+
+// 10. Find patients whose names end with “a” using $regex
+db.hospital.find({ name: { $regex: /a$/ } });
+
+
